@@ -1,8 +1,11 @@
 package sample;
 
+import java.util.regex.Pattern;
+
 public class Converter {
 
-
+    public int stateFrom;
+    public int stateTo;
     public String toBinary(double d, int precision) {
         long wholePart = (long) d;
         if (!fractionalToBinary(d - wholePart, precision).isEmpty())
@@ -12,6 +15,16 @@ public class Converter {
     }
     public String binaryToDecimal(String binary, int len)
     {
+        binary=binary.replace(",",".");
+        Pattern pattern = Pattern.compile("^[0-1,.]+$");
+        if (!pattern.matcher(binary).matches())
+        {
+            throw new IllegalArgumentException("Incorrect input.");
+        }
+        else if (!findCountOfPoints(binary))
+        {
+            throw new IllegalArgumentException("Multiplie points.");
+        }
         int point = binary.indexOf('.');
         if (point == -1)
             point = len;
@@ -31,6 +44,7 @@ public class Converter {
             return String.valueOf(intDecimal + fracDecimal);
         else
             return String.valueOf(intDecimal);
+
     }
     public  String toHeximal(double d, int precision)
     {
@@ -61,14 +75,48 @@ public class Converter {
                 somedouble=round((temp-(int)temp),10);
             }
         }
+        int prec=0;
+        char[] chars=stringBuilder.toString().toCharArray();
+        for (int i=0;i<chars.length;i++)
+        {
+            if (chars[i]=='0'&&(i+1)<=chars.length-1)
+            {
+                if (chars[i+1]!='0')
+                {
+                    prec=0;
+                    continue;
+                }
+                else if (chars[i+1]=='0')
+                {
+                    prec++;
+                }
+            }
+        }
+        if (prec>10)
+        {
+           StringBuilder stringBuilder1=new StringBuilder(stringBuilder.substring(0,stringBuilder.length()-prec));
+           stringBuilder.setLength(0);
+           stringBuilder.append(stringBuilder1.toString());
+        }
+
         if (!stringBuilder.toString().isEmpty())
-            return String.valueOf(Integer.toHexString((int)d))+"."+stringBuilder;
+            return Integer.toHexString((int) d) +"."+stringBuilder;
         else
-            return String.valueOf(Integer.toHexString((int)d));
+            return Integer.toHexString((int) d);
     }
     public  String hexToDecimal(String hex, int len)
     {
         double temp=0;
+        hex=hex.replace(",",".");
+        Pattern pattern = Pattern.compile("^[0-9,.a-fA-F]+$");
+        if (!pattern.matcher(hex).matches())
+        {
+            throw new IllegalArgumentException("Incorrect input.");
+        }
+        else if (!findCountOfPoints(hex))
+        {
+            throw new IllegalArgumentException("Multiplie points.");
+        }
         int[] decimals={10,11,12,13,14,15};
         char[] dHex={'a','b','c','d','e','f'};
         int point = hex.indexOf('.');
@@ -96,7 +144,6 @@ public class Converter {
     }
     public String toOctal(double d,int precision)
     {
-
         double temp = 0;
         double somedouble=d-(int)d;
         StringBuilder stringBuilder=new StringBuilder();
@@ -109,15 +156,50 @@ public class Converter {
             }
             somedouble=round((temp-(int)temp),10);
         }
+        int prec=0;
+        char[] chars=stringBuilder.toString().toCharArray();
+        for (int i=0;i<chars.length;i++)
+        {
+            if (chars[i]=='0'&&(i+1)<=chars.length-1)
+            {
+                if (chars[i+1]!='0')
+                {
+                    prec=0;
+                    continue;
+                }
+                else if (chars[i+1]=='0')
+                {
+                    prec++;
+                }
+            }
+        }
+        if (prec>10)
+        {
+            StringBuilder stringBuilder1=new StringBuilder(stringBuilder.substring(0,stringBuilder.length()-prec));
+            stringBuilder.setLength(0);
+            stringBuilder.append(stringBuilder1.toString());
+        }
+
         if (!stringBuilder.toString().isEmpty())
-            return String.valueOf(Integer.toOctalString((int)d))+"."+stringBuilder;
+            return Integer.toOctalString((int) d) +"."+stringBuilder;
         else
-            return String.valueOf(Integer.toOctalString((int)d));
+            return Integer.toOctalString((int) d);
 
     }
     public  String octalToDecimal(String octal,int len)
     {
         double temp=0;
+
+        octal=octal.replace(",",".");
+        Pattern pattern = Pattern.compile("^[0-7,.]+$");
+        if (!pattern.matcher(octal).matches())
+        {
+            throw new IllegalArgumentException("Incorrect input.");
+        }
+        else if (!findCountOfPoints(octal))
+        {
+            throw new IllegalArgumentException("Multiplie points.");
+        }
         int point = octal.indexOf('.');
         if (point == -1)
             point = len;
@@ -157,5 +239,20 @@ public class Converter {
             }
         }
         return binary.toString();
+    }
+    private boolean findCountOfPoints(String s)
+    {
+        s = s.replace(",",".");
+        char[] chars=s.toCharArray();
+        int point=0;
+        for (char aChar : chars) {
+            if (aChar == '.') {
+                point++;
+                if (point > 1) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
