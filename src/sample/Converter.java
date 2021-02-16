@@ -40,10 +40,12 @@ public class Converter {
             fracDecimal += (binary.charAt(i) - '0') / twos;
             twos *= 2.0;
         }
-        if (point!=-1)
-            return String.valueOf(intDecimal + fracDecimal);
-        else
-            return String.valueOf(intDecimal);
+//        if (point!=-1)
+//            return String.valueOf(intDecimal + fracDecimal);
+//        else
+//            return String.valueOf(intDecimal);
+//
+        return (point != -1) ? String.valueOf(intDecimal + fracDecimal) : String.valueOf((int)intDecimal);
 
     }
     public  String toHeximal(double d, int precision)
