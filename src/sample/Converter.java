@@ -40,12 +40,12 @@ public class Converter {
             fracDecimal += (binary.charAt(i) - '0') / twos;
             twos *= 2.0;
         }
-//        if (point!=-1)
-//            return String.valueOf(intDecimal + fracDecimal);
-//        else
-//            return String.valueOf(intDecimal);
-//
-        return (point != -1) ? String.valueOf(intDecimal + fracDecimal) : String.valueOf((int)intDecimal);
+            if (point!=len)
+             return String.valueOf(intDecimal + fracDecimal);
+        else
+              return String.valueOf((int) intDecimal);
+
+
 
     }
     public  String toHeximal(double d, int precision)
@@ -96,7 +96,7 @@ public class Converter {
         }
         if (prec>10)
         {
-           StringBuilder stringBuilder1=new StringBuilder(stringBuilder.substring(0,stringBuilder.length()-prec));
+           StringBuilder stringBuilder1=new StringBuilder(stringBuilder.substring(0,stringBuilder.length()-prec-1));
            stringBuilder.setLength(0);
            stringBuilder.append(stringBuilder1.toString());
         }
@@ -139,10 +139,10 @@ public class Converter {
                 }
             }
         }
-        if (point!=-1)
+        if (point!=len)
           return String.valueOf(Integer.parseInt(hex.substring(0,point),16)+temp);
         else
-            return String.valueOf(Integer.parseInt(hex));
+            return  String.valueOf(Integer.parseInt(hex.substring(0,point),16));
     }
     public String toOctal(double d,int precision)
     {
@@ -177,7 +177,7 @@ public class Converter {
         }
         if (prec>10)
         {
-            StringBuilder stringBuilder1=new StringBuilder(stringBuilder.substring(0,stringBuilder.length()-prec));
+            StringBuilder stringBuilder1=new StringBuilder(stringBuilder.substring(0,stringBuilder.length()-prec-1));
             stringBuilder.setLength(0);
             stringBuilder.append(stringBuilder1.toString());
         }
@@ -191,8 +191,9 @@ public class Converter {
     public  String octalToDecimal(String octal,int len)
     {
         double temp=0;
-
+        System.out.println(octal);
         octal=octal.replace(",",".");
+        System.out.println(octal);
         Pattern pattern = Pattern.compile("^[0-7,.]+$");
         if (!pattern.matcher(octal).matches())
         {
@@ -213,10 +214,10 @@ public class Converter {
             temp+=Character.getNumericValue(octal.charAt(i))*Math.pow(8,s);
 
         }
-        if (point!=-1)
+        if (point!=len)
             return String.valueOf(Integer.parseInt(octal.substring(0,point),8)+temp);
         else
-            return String.valueOf(Integer.parseInt(octal));
+            return String.valueOf(Integer.parseInt(octal.substring(0,point),8));
     }
     private  double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();

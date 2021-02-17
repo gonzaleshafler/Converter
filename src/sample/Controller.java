@@ -75,11 +75,17 @@ public class Controller implements Initializable {
                     a.setContentText("Warning!\n Translation in the same number system!");
                     a.show();
                 } else if (converter.stateTo == 2) {
-                    textFielTo.setText(converter.toBinary(Double.parseDouble(textFieldFrom.getText()), 100));
+                    String s=textFieldFrom.getText();
+                    s=s.replace(',','.');
+                    textFielTo.setText(converter.toBinary(Double.parseDouble(s),100));
                 } else if (converter.stateTo == 3) {
-                    textFielTo.setText(converter.toOctal(Double.parseDouble(textFieldFrom.getText()), 100));
+                    String s=textFieldFrom.getText();
+                    s=s.replace(',','.');
+                    textFielTo.setText(converter.toOctal(Double.parseDouble(s), 100));
                 } else if (converter.stateTo == 4) {
-                    textFielTo.setText(converter.toHeximal(Double.parseDouble(textFieldFrom.getText()), 100));
+                    String s=textFieldFrom.getText();
+                    s=s.replace(',','.');
+                    textFielTo.setText(converter.toHeximal(Double.parseDouble(s), 100));
                 } else {
                     a.setContentText("Error\nSomething went wrong, check the input is correct.");
                     a.show();
